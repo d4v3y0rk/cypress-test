@@ -1,0 +1,28 @@
+name: example-basic
+# This workflow represents a set of basic End-to-End tests
+on:
+  push:
+    branches:
+      - 'main'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+
+  basic:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cypress tests
+        uses: cypress-io/github-action@v6
+        env:
+          LIBGL_ALWAYS_SOFTWARE: 1
+        with:
+          working-directory: examples/basic
+          build: npx cypress info
